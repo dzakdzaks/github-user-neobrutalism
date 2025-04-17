@@ -3,7 +3,6 @@ package com.dzaky.githubuser.ui.userdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dzaky.githubuser.common.UiState
 import com.dzaky.githubuser.common.collectUiState
 import com.dzaky.githubuser.domain.usecase.GetUserDetailUseCase
 import com.dzaky.githubuser.domain.usecase.GetUserReposUseCase
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

@@ -94,7 +94,6 @@ fun NeoBrutalButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     borderColor: Color = MaterialTheme.colorScheme.onPrimary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     content: @Composable () -> Unit
 ) {
     val properties = LocalNeoBrutalProperties.current
@@ -320,8 +319,6 @@ fun NeoBrutalEmptyState(
     contentColor: Color = Black,
     secondaryMessage: String? = null
 ) {
-    val properties = LocalNeoBrutalProperties.current
-
     NeoBrutalCard(
         modifier = modifier,
         backgroundColor = backgroundColor,
@@ -377,8 +374,6 @@ fun NeoBrutalErrorState(
     contentColor: Color = NeoBrutalRed,
     onRetry: (() -> Unit)? = null
 ) {
-    val properties = LocalNeoBrutalProperties.current
-
     NeoBrutalCard(
         modifier = modifier,
         backgroundColor = backgroundColor,

@@ -7,18 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.dzaky.githubuser.ui.navigation.AppNavHost
 import com.dzaky.githubuser.ui.theme.GithubUserTheme
-import com.dzaky.githubuser.ui.userdetail.UserDetailScreen
-import com.dzaky.githubuser.ui.userlist.UserListScreen
-import com.dzaky.githubuser.ui.userlist.UserListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

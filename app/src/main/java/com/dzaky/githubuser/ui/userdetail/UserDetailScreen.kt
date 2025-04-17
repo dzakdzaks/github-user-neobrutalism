@@ -12,7 +12,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,7 +43,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -91,7 +89,6 @@ import com.dzaky.githubuser.ui.theme.NeoBrutalErrorState
 import com.dzaky.githubuser.ui.theme.NeoBrutalListItem
 import com.dzaky.githubuser.ui.theme.NeoBrutalYellow
 import com.dzaky.githubuser.ui.theme.White
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -101,7 +98,6 @@ fun UserDetailScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val properties = LocalNeoBrutalProperties.current
 
     // Animation states
     val contentAlpha = remember { Animatable(0f) }
@@ -689,7 +685,6 @@ private fun GlowingNeoBrutalButton(
 private fun EnhancedRepositoryItem(
     repo: Repo,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     NeoBrutalListItem(
         modifier = Modifier.fillMaxWidth(),
