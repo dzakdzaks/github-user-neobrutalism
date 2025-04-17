@@ -10,7 +10,6 @@ import com.dzaky.githubuser.ui.navigation.AppScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -26,7 +25,7 @@ class UserDetailViewModel @Inject constructor(
     ) { "username is required in UserDetailViewModel" }
 
     private val _state = MutableStateFlow(UserDetailState())
-    val state: StateFlow<UserDetailState> = _state.asStateFlow()
+    val state: StateFlow<UserDetailState> = _state
 
     init {
         onEvent(UserDetailEvent.LoadUserData)

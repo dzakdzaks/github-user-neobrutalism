@@ -1,21 +1,27 @@
-package com.dzaky.githubuser.ui.theme
+package com.dzaky.githubuser.ui.component
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,19 +29,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.dzaky.githubuser.ui.theme.Black
+import com.dzaky.githubuser.ui.theme.LightPink
+import com.dzaky.githubuser.ui.theme.LightYellow
+import com.dzaky.githubuser.ui.theme.LocalNeoBrutalProperties
+import com.dzaky.githubuser.ui.theme.NeoBrutalRed
+import com.dzaky.githubuser.ui.theme.NeoBrutalYellow
+import com.dzaky.githubuser.ui.theme.White
 
 /**
  * A Neobrutalist Card with chunky border, offset shadow
@@ -95,33 +113,79 @@ fun NeoBrutalButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     borderColor: Color = MaterialTheme.colorScheme.onPrimary,
+    enableGlowEffect: Boolean = true,
+    enableHoverEffect: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val properties = LocalNeoBrutalProperties.current
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
+    val isHovered by interactionSource.collectIsHoveredAsState()
 
-    // Animate shadow offset based on press state
-    val offsetX by animateDpAsState(
-        targetValue = if (isPressed) 0.dp else properties.shadowOffset.dp,
-        animationSpec = tween(durationMillis = 100),
-        label = "offsetX"
+    // Animations for hover/press effects
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "scaleAnimation"
     )
 
-    val offsetY by animateDpAsState(
-        targetValue = if (isPressed) 0.dp else properties.shadowOffset.dp,
-        animationSpec = tween(durationMillis = 100),
-        label = "offsetY"
+    val borderWidth by animateDpAsState(
+        targetValue = if (enableHoverEffect && isHovered && !isPressed)
+            (properties.borderWidth + 1).dp
+        else properties.borderWidth.dp,
+        label = "borderAnimation"
+    )
+
+    val glowAlpha by animateFloatAsState(
+        targetValue = if (enableGlowEffect && isHovered) 0.3f else 0f,
+        label = "glowAnimation"
+    )
+
+    val offsetX by animateFloatAsState(
+        targetValue = if (isPressed) 0f else properties.shadowOffset.toFloat(),
+        label = "offsetXAnimation"
+    )
+
+    val offsetY by animateFloatAsState(
+        targetValue = if (isPressed) 0f else properties.shadowOffset.toFloat(),
+        label = "offsetYAnimation"
     )
 
     Box(modifier = modifier) {
-        // The important change: wrap both the shadow and the button content in their own Box
-        Box(modifier = Modifier) {
+        // Glow effect
+        if (glowAlpha > 0) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clip(RoundedCornerShape(properties.cornerRadius.dp))
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(properties.cornerRadius.dp),
+                        spotColor = backgroundColor,
+                        ambientColor = backgroundColor
+                    )
+                    .alpha(glowAlpha)
+            )
+        }
+
+        // Button with enhanced effects
+        Box(
+            modifier = Modifier
+                .scale(scale)
+        ) {
             // Shadow/offset effect
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .offset { IntOffset(offsetX.roundToPx(), offsetY.roundToPx()) }
+                    .offset {
+                        IntOffset(
+                            offsetX.dp.roundToPx(),
+                            offsetY.dp.roundToPx()
+                        )
+                    }
                     .background(
                         color = borderColor,
                         shape = RoundedCornerShape(properties.cornerRadius.dp)
@@ -136,12 +200,13 @@ fun NeoBrutalButton(
                         indication = null,
                         onClick = onClick
                     )
+                    .hoverable(interactionSource)
                     .background(
                         color = backgroundColor,
                         shape = RoundedCornerShape(properties.cornerRadius.dp)
                     )
                     .border(
-                        width = properties.borderWidth.dp,
+                        width = borderWidth,
                         color = borderColor,
                         shape = RoundedCornerShape(properties.cornerRadius.dp)
                     )
@@ -418,6 +483,93 @@ fun NeoBrutalErrorState(
                     )
                 }
             }
+        }
+    }
+}
+
+/**
+* A button with icon and text using the enhanced neobrutalist style.
+*
+* @param onClick Callback to be invoked when button is clicked
+* @param text Text to display
+* @param icon Icon to display
+* @param backgroundColor Background color of the button
+* @param modifier Additional modifier to apply
+*/
+@Composable
+fun IconTextButton(
+    onClick: () -> Unit,
+    text: String,
+    icon: ImageVector,
+    backgroundColor: Color = NeoBrutalYellow,
+    modifier: Modifier = Modifier
+) {
+    NeoBrutalButton(
+        onClick = onClick,
+        backgroundColor = backgroundColor,
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Black,
+                modifier = Modifier.size(18.dp)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+    }
+}
+
+/**
+ * A reusable chip component for displaying statistics.
+ *
+ * @param icon Icon to display
+ * @param value Text value to display
+ * @param backgroundColor Background color
+ * @param modifier Additional modifier to apply
+ */
+@Composable
+fun StatChip(
+    icon: ImageVector,
+    value: String,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = backgroundColor,
+        shape = RoundedCornerShape(4.dp),
+        border = BorderStroke(1.dp, Black.copy(alpha = 0.3f)),
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = Black.copy(alpha = 0.7f)
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
