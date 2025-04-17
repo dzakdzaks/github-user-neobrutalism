@@ -19,8 +19,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.dzaky.githubuser.R
 import com.dzaky.githubuser.ui.theme.NeoBrutalYellow
 
 @Composable
@@ -45,7 +47,7 @@ fun PaginationFooter(
             // Show info about current page if totalItems is available
             if (totalItems > 0) {
                 Text(
-                    text = "Showing $totalItems items",
+                    text = stringResource(R.string.showing_items, totalItems),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )
@@ -53,7 +55,7 @@ fun PaginationFooter(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "Page $currentPage",
+                    text = stringResource(R.string.page, currentPage),
                     style = MaterialTheme.typography.bodySmall,
                     textAlign = TextAlign.Center
                 )
@@ -80,7 +82,7 @@ fun PaginationFooter(
                     Spacer(modifier = Modifier.padding(4.dp))
 
                     Text(
-                        text = "Loading more...",
+                        text = stringResource(R.string.loading_more),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -97,7 +99,7 @@ fun PaginationFooter(
                     backgroundColor = NeoBrutalYellow
                 ) {
                     Text(
-                        text = "Load More",
+                        text = stringResource(R.string.load_more),
                         style = MaterialTheme.typography.labelLarge
                     )
                 }

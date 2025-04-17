@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.dzaky.githubuser.R
 import com.dzaky.githubuser.ui.component.ErrorState
 import com.dzaky.githubuser.ui.component.LoadingState
 import com.dzaky.githubuser.ui.component.NeoBrutalButton
@@ -229,7 +231,7 @@ private fun UserDetailContent(
                                     )
 
                                     Text(
-                                        text = "@${user.username}",
+                                        text = stringResource(R.string.at_username, user.username),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = androidx.compose.ui.graphics.Color.DarkGray
                                     )
@@ -347,7 +349,9 @@ private fun UserDetailContent(
 
         // Back button floating at the top
         Box(
-            modifier = Modifier.align(Alignment.TopStart).padding(16.dp)
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
         ) {
             NeoBrutalButton(
                 onClick = onBackClick,

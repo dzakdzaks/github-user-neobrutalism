@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Github User</string>
+    <string name="search_results">Search Results</string>
+    <string name="github_user_explorer">GitHub User Explorer</string>
+    <string name="visit_github_profile">Visit GitHub Profile</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="load_more">Load More</string>
+    <string name="loading_more">Loading more…</string>
+    <string name="of_users">%1$s of %2$s users</string>
+    <string name="at_username">\@%1$s</string>
+    <string name="page">Page %1$s</string>
+    <string name="showing_items">Showing %1$s items</string>
+    <string name="explore_s_projects">Explore %1$s\'s projects</string>
+    <string name="repositories">Repositories</string>
 </resources>

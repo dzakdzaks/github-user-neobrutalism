@@ -28,9 +28,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.dzaky.githubuser.R
 import com.dzaky.githubuser.domain.model.Repo
 import com.dzaky.githubuser.ui.theme.Black
 import com.dzaky.githubuser.ui.theme.LightBlue
@@ -75,14 +77,14 @@ fun RepositorySectionHeader(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Repositories",
+                    text = stringResource(R.string.repositories),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold
                     )
                 )
 
                 Text(
-                    text = "Explore $username's projects",
+                    text = stringResource(R.string.explore_s_projects, username),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -133,7 +135,7 @@ fun RepoCountBadge(
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Text(
-            text = "$repoCount",
+            text = repoCount.toString(),
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Bold
             ),

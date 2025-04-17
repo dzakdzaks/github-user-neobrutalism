@@ -45,12 +45,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dzaky.githubuser.R
 import com.dzaky.githubuser.ui.component.ErrorState
 import com.dzaky.githubuser.ui.component.LoadingState
 import com.dzaky.githubuser.ui.component.NeoBrutalButton
@@ -225,7 +227,7 @@ private fun AppHeader() {
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = "GitHub User Explorer",
+                text = stringResource(R.string.github_user_explorer),
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -371,13 +373,17 @@ private fun UserListContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Search Results",
+                            text = stringResource(R.string.search_results),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.weight(1f)
                         )
 
                         Text(
-                            text = "${state.users.size} of ${state.totalCount} users",
+                            text = stringResource(
+                                R.string.of_users,
+                                state.users.size,
+                                state.totalCount
+                            ),
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }

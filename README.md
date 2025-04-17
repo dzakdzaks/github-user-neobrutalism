@@ -1,6 +1,6 @@
 # GitHub User
 
-A modern Android application that allows users to search and explore GitHub user profiles.
+A modern Android application that allows users to search and explore GitHub user profiles with Neobrutalism theme.
 
 ## Features
 
