@@ -67,7 +67,6 @@ import com.dzaky.githubuser.ui.theme.LightGray
 import com.dzaky.githubuser.ui.theme.LocalNeoBrutalProperties
 import com.dzaky.githubuser.ui.theme.NeoBrutalYellow
 import com.dzaky.githubuser.ui.theme.White
-import java.util.Locale
 
 @Composable
 fun UserDetailScreen(
@@ -248,7 +247,6 @@ private fun UserDetailContent(
 
                                     // Use reusable component
                                     ProfileButton(
-                                        profileUrl = user.profileUrl,
                                         onClick = { onRepoClick(user.profileUrl) },
                                         modifier = Modifier.fillMaxWidth()
                                     )

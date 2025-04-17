@@ -59,9 +59,9 @@ import com.dzaky.githubuser.ui.component.NeoBrutalEmptyState
 import com.dzaky.githubuser.ui.component.NeoBrutalTextField
 import com.dzaky.githubuser.ui.component.PaginationFooter
 import com.dzaky.githubuser.ui.component.UserListItem
+import com.dzaky.githubuser.ui.component.util.ClearFocusOnScroll
 import com.dzaky.githubuser.ui.component.util.PaginationHandler
 import com.dzaky.githubuser.ui.component.util.StaggeredAnimatedItem
-import com.dzaky.githubuser.ui.component.util.clearFocusOnScroll
 import com.dzaky.githubuser.ui.component.util.shouldLoadMore
 import com.dzaky.githubuser.ui.theme.Black
 import com.dzaky.githubuser.ui.theme.LightBlue
@@ -98,7 +98,7 @@ fun UserListScreen(
     )
 
     // Use extension to clear focus on scroll
-    listState.clearFocusOnScroll { localFocusManager.clearFocus() }
+    listState.ClearFocusOnScroll { localFocusManager.clearFocus() }
 
     // Launch animations with staggered delay
     LaunchedEffect(Unit) {

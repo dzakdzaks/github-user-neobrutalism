@@ -184,13 +184,11 @@ fun UserListItem(
 /**
  * A button that navigates to the user's GitHub profile.
  *
- * @param profileUrl URL to the GitHub profile
  * @param onClick Callback when button is clicked
  * @param modifier Additional modifier to apply
  */
 @Composable
 fun ProfileButton(
-    profileUrl: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

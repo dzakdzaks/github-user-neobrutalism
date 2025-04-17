@@ -31,7 +31,6 @@ fun LazyListState.shouldLoadMore(buffer: Int = 3) = remember {
  * A composable that automatically triggers loading more items when the user
  * scrolls near the end of the list, respecting pagination state.
  *
- * @param listState The lazy list state to monitor
  * @param hasNextPage Whether there are more items to load
  * @param isLoading Whether new items are currently being loaded
  * @param isLoadingMore Whether more items are being loaded (pagination)
@@ -58,9 +57,9 @@ fun PaginationHandler(
  * @param clearFocus Function to clear focus
  */
 @Composable
-fun LazyListState.clearFocusOnScroll(clearFocus: () -> Unit) {
+fun LazyListState.ClearFocusOnScroll(clearFocus: () -> Unit) {
     LaunchedEffect(this) {
-        snapshotFlow { this@clearFocusOnScroll.isScrollInProgress }
+        snapshotFlow { this@ClearFocusOnScroll.isScrollInProgress }
             .distinctUntilChanged()
             .filter { it }  // Only when scrolling starts
             .collect { clearFocus() }
