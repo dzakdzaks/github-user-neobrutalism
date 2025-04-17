@@ -4,7 +4,7 @@ package com.dzaky.githubuser.ui.userlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dzaky.githubuser.common.UiState
+import com.dzaky.githubuser.common.collectUiState
 import com.dzaky.githubuser.domain.usecase.SearchUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -16,10 +16,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-private const val PER_PAGE = 30
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
@@ -114,38 +111,27 @@ class UserListViewModel @Inject constructor(
 
         _state.update { it.copy(isLoading = true, error = null) }
 
-        viewModelScope.launch {
-            searchUsersUseCase(query, page, PER_PAGE).collect { result ->
-                when (result) {
-                    is UiState.Success -> {
-                        val paginatedResponse = result.data
-                        _state.update {
-                            it.copy(
-                                users = it.users + paginatedResponse.data,
-                                isLoading = false,
-                                isLoadingMore = false,
-                                currentPage = paginatedResponse.page,
-                                totalCount = paginatedResponse.totalCount,
-                                hasNextPage = paginatedResponse.hasNextPage,
-                                error = null
-                            )
-                        }
-                    }
-                    is UiState.Loading -> {
-                        _state.update { it.copy(isLoading = page == 1, isLoadingMore = page > 1) }
-                    }
-                    is UiState.Error -> {
-                        _state.update {
-                            it.copy(
-                                error = result.message,
-                                isLoading = false,
-                                isLoadingMore = false
-                            )
-                        }
-                    }
-                }
+        viewModelScope.collectUiState(
+            source = searchUsersUseCase(query, page),
+            targetState = _state,
+            onSuccess = { paginatedResponse ->
+                copy(
+                    users = users + paginatedResponse.data,
+                    isLoading = false,
+                    isLoadingMore = false,
+                    currentPage = paginatedResponse.page,
+                    totalCount = paginatedResponse.totalCount,
+                    hasNextPage = paginatedResponse.hasNextPage,
+                    error = null
+                )
+            },
+            onLoading = {
+                copy(isLoading = page == 1, isLoadingMore = page > 1)
+            },
+            onError = { message ->
+                copy(error = message, isLoading = false, isLoadingMore = false)
             }
-        }
+        )
     }
 
     private fun loadNextPage(query: String, page: Int) {

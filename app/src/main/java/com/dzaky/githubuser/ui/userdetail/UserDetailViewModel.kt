@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dzaky.githubuser.common.UiState
+import com.dzaky.githubuser.common.collectUiState
 import com.dzaky.githubuser.domain.usecase.GetUserDetailUseCase
 import com.dzaky.githubuser.domain.usecase.GetUserReposUseCase
 import com.dzaky.githubuser.ui.navigation.AppScreen
@@ -60,21 +61,13 @@ class UserDetailViewModel @Inject constructor(
     private fun loadUserDetail() {
         _state.update { it.copy(isLoading = true, error = null) }
 
-        viewModelScope.launch {
-            getUserDetailUseCase(username).collect { result ->
-                when (result) {
-                    is UiState.Success -> {
-                        _state.update { it.copy(user = result.data, isLoading = false, error = null) }
-                    }
-                    is UiState.Loading -> {
-                        _state.update { it.copy(isLoading = true) }
-                    }
-                    is UiState.Error -> {
-                        _state.update { it.copy(error = result.message, isLoading = false) }
-                    }
-                }
-            }
-        }
+        viewModelScope.collectUiState(
+            source = getUserDetailUseCase(username),
+            targetState = _state,
+            onSuccess = { result -> copy(user = result, isLoading = false, error = null) },
+            onLoading = { copy(isLoading = true) },
+            onError = { message -> copy(error = message, isLoading = false) }
+        )
     }
 
     private fun loadUserRepos(page: Int, resetList: Boolean = false) {
@@ -84,37 +77,28 @@ class UserDetailViewModel @Inject constructor(
             _state.update { it.copy(isLoadingMoreRepos = true) }
         }
 
-        viewModelScope.launch {
-            getUserReposUseCase(username, page, 20).collect { result ->
-                when (result) {
-                    is UiState.Success -> {
-                        val paginatedResponse = result.data
-                        _state.update {
-                            it.copy(
-                                repos = if (resetList) paginatedResponse.data else it.repos + paginatedResponse.data,
-                                isLoading = false,
-                                isLoadingMoreRepos = false,
-                                currentRepoPage = page,
-                                hasNextRepoPage = paginatedResponse.hasNextPage,
-                                error = null
-                            )
-                        }
-                    }
-                    is UiState.Loading -> {
-                        // Loading state is already set before collecting
-                    }
-                    is UiState.Error -> {
-                        _state.update {
-                            it.copy(
-                                error = result.message,
-                                isLoading = false,
-                                isLoadingMoreRepos = false
-                            )
-                        }
-                    }
-                }
+        viewModelScope.collectUiState(
+            source = getUserReposUseCase(username, page),
+            targetState = _state,
+            onSuccess = { paginatedResponse ->
+                copy(
+                    repos = if (resetList) paginatedResponse.data else repos + paginatedResponse.data,
+                    isLoading = false,
+                    isLoadingMoreRepos = false,
+                    currentRepoPage = page,
+                    hasNextRepoPage = paginatedResponse.hasNextPage,
+                    error = null
+                )
+            },
+            onLoading = { copy() },
+            onError = { message ->
+                copy(
+                    error = message,
+                    isLoading = false,
+                    isLoadingMoreRepos = false
+                )
             }
-        }
+        )
     }
 
     private fun loadNextReposPage() {
