@@ -40,7 +40,7 @@ The project follows a clean architecture approach with the following components:
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/GithubUser.git
+   git clone https://github.com/dzakdzaks/github-user-neobrutalism.git
    ```
 
 2. Create a `local.properties` file in the root directory and add your GitHub API token:
