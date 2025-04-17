@@ -60,6 +60,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
@@ -157,19 +158,22 @@ fun UserListScreen(
                 }
         ) {
             // App header with improved neobrutalist style
+            val headerOffsetY by animateDpAsState(
+                targetValue = if (headerAlpha.value == 1f) 0.dp else (-20).dp,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                ),
+                label = "headerOffset"
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
                     .alpha(headerAlpha.value)
-                    .offset(y = animateDpAsState(
-                        targetValue = if (headerAlpha.value == 1f) 0.dp else (-20).dp,
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        ),
-                        label = "headerOffset"
-                    ).value)
+                    .offset {
+                        IntOffset(x = 0, y = headerOffsetY.roundToPx())
+                    }
             ) {
                 NeoBrutalCard(
                     modifier = Modifier.fillMaxWidth(),
@@ -204,15 +208,18 @@ fun UserListScreen(
             }
 
             // Enhanced search field with animation
+            val searchOffsetY by animateDpAsState(
+                targetValue = if (searchAlpha.value == 1f) 0.dp else 20.dp,
+                animationSpec = spring(),
+                label = "searchOffset"
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .alpha(searchAlpha.value)
-                    .offset(y = animateDpAsState(
-                        targetValue = if (searchAlpha.value == 1f) 0.dp else 20.dp,
-                        animationSpec = spring(),
-                        label = "searchOffset"
-                    ).value)
+                    .offset {
+                        IntOffset(x = 0, y = searchOffsetY.roundToPx())
+                    }
                     .padding(bottom = 16.dp)
             ) {
                 Row(
@@ -418,7 +425,9 @@ fun UserListScreen(
                                     Box(
                                         modifier = Modifier
                                             .alpha(itemAlpha.value)
-                                            .offset(y = itemOffset.value.dp)
+                                            .offset {
+                                                IntOffset(x = 0, y = itemOffset.value.dp.roundToPx())
+                                            }
                                     ) {
                                         NeoBrutalListItem(
                                             modifier = Modifier.fillMaxWidth(),
