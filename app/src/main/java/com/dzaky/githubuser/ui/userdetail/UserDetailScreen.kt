@@ -71,6 +71,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -90,6 +91,7 @@ import com.dzaky.githubuser.ui.theme.NeoBrutalListItem
 import com.dzaky.githubuser.ui.theme.NeoBrutalYellow
 import com.dzaky.githubuser.ui.theme.White
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 fun UserDetailScreen(
@@ -145,20 +147,19 @@ fun UserDetailScreen(
             }
 
             state.user != null -> {
+                val offsetY by animateDpAsState(
+                    targetValue = if (contentAlpha.value == 1f) 0.dp else 30.dp,
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    ),
+                    label = "contentOffset"
+                )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .alpha(contentAlpha.value)
-                        .offset(
-                            y = animateDpAsState(
-                                targetValue = if (contentAlpha.value == 1f) 0.dp else 30.dp,
-                                animationSpec = spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessLow
-                                ),
-                                label = "contentOffset"
-                            ).value
-                        )
+                        .offset { IntOffset(0, offsetY.roundToPx()) }
                 ) {
                     UserDetailContent(
                         state = state,
@@ -224,7 +225,12 @@ private fun UserDetailContent(
                     modifier = Modifier
                         .height(headerHeight)
                         .fillMaxWidth()
-                        .offset(y = (-headerOffset.value).dp)
+                        .offset {
+                            IntOffset(
+                                x = 0,
+                                y = (-headerOffset.value).dp.roundToPx()
+                            )
+                        }
                 ) {
                     // Profile card with avatar and info
                     Box(
@@ -466,13 +472,17 @@ private fun UserDetailContent(
                         Box(
                             modifier = Modifier
                                 .alpha(itemAlpha.value)
-                                .offset(y = itemOffset.value.dp)
+                                .offset {
+                                    IntOffset(
+                                        x = 0,
+                                        y = itemOffset.value.dp.roundToPx()
+                                    )
+                                }
                                 .padding(vertical = 4.dp)
                         ) {
                             EnhancedRepositoryItem(
                                 repo = repo,
                                 onClick = { onRepoClick(repo.htmlUrl) },
-                                modifier = Modifier.fillMaxWidth()
                             )
                         }
                     }
@@ -806,7 +816,7 @@ private fun StatChip(
 // Helper function to format numbers with K for thousands
 private fun formatNumber(number: Int): String {
     return when {
-        number >= 1000 -> String.format("%.1fK", number / 1000.0)
+        number >= 1000 -> String.format(Locale.US, "%.1fK", number / 1000.0)
         else -> number.toString()
     }
 }

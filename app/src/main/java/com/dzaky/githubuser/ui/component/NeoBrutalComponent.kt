@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 /**
@@ -120,7 +121,7 @@ fun NeoBrutalButton(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .offset(x = offsetX, y = offsetY)
+                    .offset { IntOffset(offsetX.roundToPx(), offsetY.roundToPx()) }
                     .background(
                         color = borderColor,
                         shape = RoundedCornerShape(properties.cornerRadius.dp)
@@ -278,7 +279,7 @@ fun NeoBrutalListItem(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = offsetX, y = offsetY)
+                .offset { IntOffset(offsetX.roundToPx(), offsetY.roundToPx()) }
                 .background(
                     color = borderColor,
                     shape = RoundedCornerShape(properties.cornerRadius.dp)
