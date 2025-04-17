@@ -122,7 +122,7 @@ fun UserListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = { localFocusManager.clearFocus() })
                 }
